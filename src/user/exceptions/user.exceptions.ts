@@ -1,11 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 
-export class InvalidUserIdException extends HttpException {
-  constructor() {
-    super('Invalid user ID format', HttpStatus.BAD_REQUEST)
-  }
-}
-
 export class UserNotFoundException extends HttpException {
   constructor() {
     super('User not found', HttpStatus.NOT_FOUND)

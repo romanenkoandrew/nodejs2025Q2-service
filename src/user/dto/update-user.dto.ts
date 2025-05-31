@@ -1,11 +1,11 @@
 import { IsString, IsNotEmpty, Length } from 'class-validator'
 
-export class CreateUserDto {
+export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
-  login: string
+  oldPassword: string
 
   @IsString()
   @IsNotEmpty()
-  password: string
-} 
+  newPassword: string
+}

@@ -7,15 +7,13 @@ import {
   Delete,
   HttpCode,
   Put,
+  ParseUUIDPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {
-  CreateUserDto,
-  UpdatePasswordDto,
-  UserWithoutPassword,
-} from './interfaces/user.interface';
-import { InvalidUserIdException } from './exceptions/user.exceptions';
-import { uuidCheck } from 'src/utils/uuid-validation';
+import { UserWithoutPassword } from './interfaces/user.interface';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -25,41 +23,31 @@ export class UserController {
   async create(
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserWithoutPassword> {
-    const user = this.userService.create(createUserDto);
-    return this.userService.findOne(user.id);
+    const user = await this.userService.create(createUserDto);
+    return await this.userService.getById(user.id);
   }
 
   @Get()
   async getAll(): Promise<UserWithoutPassword[]> {
-    return this.userService.findAll();
+    return await this.userService.getAll();
   }
 
   @Get(':id')
-  async getById(@Param('id') id: string): Promise<UserWithoutPassword> {
-    if (!uuidCheck(id)) {
-      throw new InvalidUserIdException();
-    }
-    return this.userService.findOne(id);
+  async getById(@Param('id', ParseUUIDPipe) id: string): Promise<UserWithoutPassword> {
+    return await this.userService.getById(id);
   }
 
   @Put(':id')
   async update(
-    @Param('id') id: string,
-    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePasswordDto: UpdateUserDto,
   ): Promise<UserWithoutPassword> {
-    if (!uuidCheck(id)) {
-      throw new InvalidUserIdException();
-    }
-    this.userService.updatePassword(id, updatePasswordDto);
-    return this.userService.findOne(id);
+    return await this.userService.update(id, updatePasswordDto);
   }
 
   @Delete(':id')
-  @HttpCode(204)
-  async delete(@Param('id') id: string): Promise<void> {
-    if (!uuidCheck(id)) {
-      throw new InvalidUserIdException();
-    }
-    this.userService.remove(id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.userService.delete(id);
   }
 }
