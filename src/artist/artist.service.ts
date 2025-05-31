@@ -1,45 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Artist } from './interfaces/artist.interface';
-import { CreateArtistDto, UpdateArtistDto } from './dto/artist-dto';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Injectable()
 export class ArtistService {
   private readonly artists: Artist[] = [];
 
-  create(createArtistDto: CreateArtistDto): Artist {
+  async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist: Artist = {
       id: randomUUID(),
       ...createArtistDto,
     };
 
     this.artists.push(artist);
-    return artist;
+    return new Promise((resolve) => {
+      resolve(artist);
+    });
   }
 
-  getAll(): Artist[] {
-    return this.artists;
+  async getAll(): Promise<Artist[]> {
+    return new Promise((resolve) => {
+      resolve(this.artists);
+    });
   }
 
-  getById(id: string): Artist {
-    const artist = this.artists.find((artist) => artist.id === id);
-    if (!artist) {
-      throw new NotFoundException(`Artist with ID ${id} not found`);
-    }
-    return artist;
+  async getById(id: string): Promise<Artist> {
+    return new Promise((resolve, reject) => {
+      const artist = this.artists.find((artist) => artist.id === id);
+      if (!artist) {
+        reject(new NotFoundException(`Artist with ID ${id} not found`));
+      }
+      resolve(artist);
+    });
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto): Artist {
-    const artist = this.getById(id);
+  async update(id: string, updateArtistDto: UpdateArtistDto): Promise<Artist> {
+    const artist = await this.getById(id);
     Object.assign(artist, updateArtistDto);
-    return artist;
+    return new Promise((resolve) => {
+      resolve(artist);
+    });
   }
 
-  delete(id: string): void {
-    const artistIndex = this.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
-      throw new NotFoundException(`Artist with ID ${id} not found`);
-    }
-    this.artists.splice(artistIndex, 1);
+  async delete(id: string): Promise<void> {
+    const artist = await this.getById(id);
+    this.artists.splice(this.artists.indexOf(artist), 1);
   }
 }
