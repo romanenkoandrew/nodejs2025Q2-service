@@ -1,12 +1,4 @@
-import { IsString, Length, IsBoolean, IsOptional } from 'class-validator'
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateArtistDto } from 'src/artist/dto/create-artist.dto';
 
-export class UpdateArtistDto {
-  @IsString()
-  @IsOptional()
-  @Length(3, 50)
-  name?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  grammy?: boolean;
-}
+export class UpdateArtistDto extends PartialType(CreateArtistDto) {}    
