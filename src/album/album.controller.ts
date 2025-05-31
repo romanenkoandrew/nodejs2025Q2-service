@@ -44,4 +44,4 @@ import {
     async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
       await this.albumService.delete(id);
     }
-  } 
+} 
