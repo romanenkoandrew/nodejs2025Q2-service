@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Artist } from './interfaces/artist.interface';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { ArtistNotFoundException } from './exceptions/artist.exceptions';
 
 @Injectable()
 export class ArtistService {
@@ -30,7 +31,7 @@ export class ArtistService {
     return new Promise((resolve, reject) => {
       const artist = this.artists.find((artist) => artist.id === id);
       if (!artist) {
-        reject(new NotFoundException(`Artist with ID ${id} not found`));
+        reject(new ArtistNotFoundException());
       }
       resolve(artist);
     });
