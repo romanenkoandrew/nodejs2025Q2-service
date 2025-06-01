@@ -6,6 +6,7 @@ import { FavoritesResponse } from './interfaces/favorites.interface';
 import { ArtistService } from 'src/artist/artist.service';
 import { AlbumService } from 'src/album/album.service';
 import { TrackService } from 'src/track/track.service'; 
+import { FavoritesUnprocessableEntityException } from './exceptions/favorites.exceptions';
 
 @Injectable()
 export class FavoritesService {
@@ -60,26 +61,26 @@ export class FavoritesService {
   }
 
   private async getArtist(id: string): Promise<Artist> {
-    const artist = await this.artistService.getById(id);
-    if (!artist) {
-      throw new NotFoundException(`Artist with ID ${id} not found`);
+    try {
+      return await this.artistService.getById(id);
+    } catch (error) {
+      throw new FavoritesUnprocessableEntityException('Artist', id);
     }
-    return artist;
   }
 
   private async getAlbum(id: string): Promise<Album> {
-    const album = await this.albumService.getById(id);
-    if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found`);
+    try {
+      return await this.albumService.getById(id);
+    } catch (error) {
+      throw new FavoritesUnprocessableEntityException('Album', id);
     }
-    return album;
   }
 
   private async getTrack(id: string): Promise<Track> {
-    const track = await this.trackService.getById(id);
-    if (!track) {
-      throw new NotFoundException(`Track with ID ${id} not found`);
+    try {
+      return await this.trackService.getById(id);
+    } catch (error) {
+      throw new FavoritesUnprocessableEntityException('Track', id);
     }
-    return track;
   }
 }
