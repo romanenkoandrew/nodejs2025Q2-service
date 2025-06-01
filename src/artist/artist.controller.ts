@@ -35,7 +35,10 @@ export class ArtistController {
   }
 
   @Put(':id')
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateArtistDto: UpdateArtistDto): Promise<Artist> {
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ): Promise<Artist> {
     return await this.artistService.update(id, updateArtistDto);
   }
 
@@ -44,4 +47,4 @@ export class ArtistController {
   async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.artistService.delete(id);
   }
-} 
+}

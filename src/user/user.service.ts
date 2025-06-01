@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  User,
-  UserWithoutPassword,
-} from './interfaces/user.interface';
+import { User, UserWithoutPassword } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { randomUUID } from 'node:crypto';
 import {
@@ -41,7 +38,10 @@ export class UserService {
     return this.withoutPassword([user])[0];
   }
 
-  async update(id: string, updatePasswordDto: UpdateUserDto): Promise<UserWithoutPassword> {
+  async update(
+    id: string,
+    updatePasswordDto: UpdateUserDto,
+  ): Promise<UserWithoutPassword> {
     const user = await this.getUserById(id);
     if (user.password !== updatePasswordDto.oldPassword) {
       throw new InvalidPasswordException();
@@ -68,6 +68,11 @@ export class UserService {
   }
 
   private withoutPassword(users: User[]): UserWithoutPassword[] {
-    return users.map(({ password, ...user }) => user);
+    return users.map(
+      (user) =>
+        Object.fromEntries(
+          Object.entries(user).filter(([key]) => key !== 'password'),
+        ) as UserWithoutPassword,
+    );
   }
 }

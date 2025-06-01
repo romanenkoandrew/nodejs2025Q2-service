@@ -52,4 +52,4 @@ export class FavoritesController {
   async deleteTrack(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.favoritesService.deleteTrack(id);
   }
-} 
+}

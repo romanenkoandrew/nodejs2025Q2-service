@@ -5,10 +5,7 @@ import { TrackModule } from 'src/track/track.module';
 import { FavoritesModule } from 'src/favorites/favorites.module';
 
 @Module({
-  imports: [
-    TrackModule,
-    forwardRef(() => FavoritesModule)
-  ],
+  imports: [TrackModule, forwardRef(() => FavoritesModule)],
   controllers: [AlbumController],
   providers: [AlbumService],
   exports: [AlbumService],

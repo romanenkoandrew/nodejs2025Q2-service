@@ -4,9 +4,7 @@ import { TrackController } from './track.controller';
 import { FavoritesModule } from 'src/favorites/favorites.module';
 
 @Module({
-  imports: [
-    forwardRef(() => FavoritesModule)
-  ],
+  imports: [forwardRef(() => FavoritesModule)],
   controllers: [TrackController],
   providers: [TrackService],
   exports: [TrackService],

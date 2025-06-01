@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, forwardRef, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Track } from './interface/track.inteface';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -11,7 +16,7 @@ export class TrackService {
 
   constructor(
     @Inject(forwardRef(() => FavoritesService))
-    private readonly favoritesService: FavoritesService
+    private readonly favoritesService: FavoritesService,
   ) {}
 
   async create(createTrackDto: CreateTrackDto): Promise<Track> {

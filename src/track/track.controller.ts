@@ -35,7 +35,10 @@ export class TrackController {
   }
 
   @Put(':id')
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTrackDto: UpdateTrackDto): Promise<Track> {
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ): Promise<Track> {
     return await this.trackService.update(id, updateTrackDto);
   }
 
@@ -44,4 +47,4 @@ export class TrackController {
   async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.trackService.delete(id);
   }
-} 
+}

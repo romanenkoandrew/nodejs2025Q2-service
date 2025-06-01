@@ -5,6 +5,6 @@ export type User = {
   version: number;
   createdAt: number;
   updatedAt: number;
-}
+};
 
 export type UserWithoutPassword = Omit<User, 'password'>;

@@ -33,7 +33,9 @@ export class UserController {
   }
 
   @Get(':id')
-  async getById(@Param('id', ParseUUIDPipe) id: string): Promise<UserWithoutPassword> {
+  async getById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<UserWithoutPassword> {
     return await this.userService.getById(id);
   }
 

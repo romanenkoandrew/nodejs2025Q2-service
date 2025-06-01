@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, forwardRef, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Album } from './interfaces/album.interface';
 import { CreateAlbumDto } from './dto/create-album.dto';

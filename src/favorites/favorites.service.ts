@@ -5,7 +5,7 @@ import { Artist } from 'src/artist/interfaces/artist.interface';
 import { FavoritesResponse } from './interfaces/favorites.interface';
 import { ArtistService } from 'src/artist/artist.service';
 import { AlbumService } from 'src/album/album.service';
-import { TrackService } from 'src/track/track.service'; 
+import { TrackService } from 'src/track/track.service';
 import { FavoritesUnprocessableEntityException } from './exceptions/favorites.exceptions';
 
 @Injectable()
@@ -34,8 +34,8 @@ export class FavoritesService {
   }
 
   async addArtist(id: string): Promise<void> {
-      const artist = await this.getArtist(id);
-      this.artists.push(artist);
+    const artist = await this.getArtist(id);
+    this.artists.push(artist);
   }
 
   async deleteArtist(id: string): Promise<void> {
@@ -64,21 +64,23 @@ export class FavoritesService {
   }
 
   async syncOnArtistDelete(artistId: string): Promise<void> {
-    const artistIndex = this.artists.findIndex(artist => artist.id === artistId);
+    const artistIndex = this.artists.findIndex(
+      (artist) => artist.id === artistId,
+    );
     if (artistIndex !== -1) {
       this.artists.splice(artistIndex, 1);
     }
   }
 
   async syncOnAlbumDelete(albumId: string): Promise<void> {
-    const albumIndex = this.albums.findIndex(album => album.id === albumId);
+    const albumIndex = this.albums.findIndex((album) => album.id === albumId);
     if (albumIndex !== -1) {
       this.albums.splice(albumIndex, 1);
     }
   }
 
   async syncOnTrackDelete(trackId: string): Promise<void> {
-    const trackIndex = this.tracks.findIndex(track => track.id === trackId);
+    const trackIndex = this.tracks.findIndex((track) => track.id === trackId);
     if (trackIndex !== -1) {
       this.tracks.splice(trackIndex, 1);
     }
