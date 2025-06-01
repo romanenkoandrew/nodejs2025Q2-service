@@ -3,10 +3,12 @@ import { randomUUID } from 'node:crypto';
 import { Album } from './interfaces/album.interface';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-
+import { TrackService } from 'src/track/track.service';
 @Injectable()
 export class AlbumService {
   private readonly albums: Album[] = [];
+
+  constructor(private readonly trackService: TrackService) {}
 
   async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
     const album: Album = {
@@ -46,6 +48,17 @@ export class AlbumService {
 
   async delete(id: string): Promise<void> {
     const album = await this.getById(id);
+    await this.trackService.updateTracksByAlbumId(id);
     this.albums.splice(this.albums.indexOf(album), 1);
+  }
+
+  async updateAlbumsByArtistId(artistId: string): Promise<void> {
+    return new Promise((resolve) => {
+      const albums = this.albums.filter((album) => album.artistId === artistId);
+      albums.forEach((album) => {
+        album.artistId = null;
+      });
+      resolve();
+    });
   }
 }

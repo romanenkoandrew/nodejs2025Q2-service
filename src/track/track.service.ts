@@ -48,4 +48,24 @@ export class TrackService {
     const track = await this.getById(id);
     this.tracks.splice(this.tracks.indexOf(track), 1);
   }
+
+  async updateTracksByAlbumId(albumId: string): Promise<void> {
+    return new Promise((resolve) => {
+      const tracks = this.tracks.filter((track) => track.albumId === albumId);
+      tracks.forEach((track) => {
+        track.albumId = null;
+      });
+      resolve();
+    });
+  }
+
+  async updateTracksByArtistId(artistId: string): Promise<void> {
+    return new Promise((resolve) => {
+      const tracks = this.tracks.filter((track) => track.artistId === artistId);
+      tracks.forEach((track) => {
+        track.artistId = null;
+      });
+      resolve();
+    });
+  }
 }

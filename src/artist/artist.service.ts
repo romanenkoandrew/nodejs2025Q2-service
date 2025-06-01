@@ -4,10 +4,16 @@ import { Artist } from './interfaces/artist.interface';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistNotFoundException } from './exceptions/artist.exceptions';
-
+import { AlbumService } from '../album/album.service';
+import { TrackService } from '../track/track.service';
 @Injectable()
 export class ArtistService {
   private readonly artists: Artist[] = [];
+
+  constructor(
+    private readonly albumService: AlbumService,
+    private readonly trackService: TrackService,
+  ) {}
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist: Artist = {
@@ -47,6 +53,8 @@ export class ArtistService {
 
   async delete(id: string): Promise<void> {
     const artist = await this.getById(id);
+    await this.albumService.updateAlbumsByArtistId(id);
+    await this.trackService.updateTracksByArtistId(id);
     this.artists.splice(this.artists.indexOf(artist), 1);
   }
 }
