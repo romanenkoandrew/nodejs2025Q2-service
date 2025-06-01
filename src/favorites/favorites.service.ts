@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Track } from 'src/track/interface/track.inteface';
 import { Album } from 'src/album/interfaces/album.interface';
 import { Artist } from 'src/artist/interfaces/artist.interface';
@@ -11,8 +11,11 @@ import { FavoritesUnprocessableEntityException } from './exceptions/favorites.ex
 @Injectable()
 export class FavoritesService {
   constructor(
+    @Inject(forwardRef(() => ArtistService))
     private readonly artistService: ArtistService,
+    @Inject(forwardRef(() => AlbumService))
     private readonly albumService: AlbumService,
+    @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,
   ) {}
 
@@ -58,6 +61,27 @@ export class FavoritesService {
   async deleteTrack(id: string): Promise<void> {
     const track = await this.getTrack(id);
     this.tracks.splice(this.tracks.indexOf(track), 1);
+  }
+
+  async syncOnArtistDelete(artistId: string): Promise<void> {
+    const artistIndex = this.artists.findIndex(artist => artist.id === artistId);
+    if (artistIndex !== -1) {
+      this.artists.splice(artistIndex, 1);
+    }
+  }
+
+  async syncOnAlbumDelete(albumId: string): Promise<void> {
+    const albumIndex = this.albums.findIndex(album => album.id === albumId);
+    if (albumIndex !== -1) {
+      this.albums.splice(albumIndex, 1);
+    }
+  }
+
+  async syncOnTrackDelete(trackId: string): Promise<void> {
+    const trackIndex = this.tracks.findIndex(track => track.id === trackId);
+    if (trackIndex !== -1) {
+      this.tracks.splice(trackIndex, 1);
+    }
   }
 
   private async getArtist(id: string): Promise<Artist> {

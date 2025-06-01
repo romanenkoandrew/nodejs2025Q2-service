@@ -1,12 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, forwardRef, Inject } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Track } from './interface/track.inteface';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class TrackService {
   private readonly tracks: Track[] = [];
+
+  constructor(
+    @Inject(forwardRef(() => FavoritesService))
+    private readonly favoritesService: FavoritesService
+  ) {}
 
   async create(createTrackDto: CreateTrackDto): Promise<Track> {
     const track: Track = {
@@ -46,6 +52,7 @@ export class TrackService {
 
   async delete(id: string): Promise<void> {
     const track = await this.getById(id);
+    await this.favoritesService.syncOnTrackDelete(id);
     this.tracks.splice(this.tracks.indexOf(track), 1);
   }
 
