@@ -14,7 +14,12 @@ import { UserService } from './user.service';
 import { User, UserWithoutPassword } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -23,10 +28,10 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @ApiOperation({ summary: 'Create new user' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'User has been successfully created',
-    type: CreateUserDto 
+    type: CreateUserDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @Post()
@@ -38,10 +43,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return all users',
-    type: [User]
+    type: [User],
   })
   @Get()
   async getAll(): Promise<UserWithoutPassword[]> {
@@ -49,10 +54,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Get user by id' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return user by id',
-    type: User 
+    type: User,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Get(':id')
@@ -63,10 +68,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Update user password' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Password has been successfully updated',
-    type: UpdateUserDto
+    type: UpdateUserDto,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Put(':id')
@@ -78,7 +83,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Delete user' })
-  @ApiResponse({ status: 204, description: 'User has been successfully deleted' })
+  @ApiResponse({
+    status: 204,
+    description: 'User has been successfully deleted',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)

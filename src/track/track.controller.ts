@@ -14,7 +14,12 @@ import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './interface/track.inteface';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Tracks')
 @ApiBearerAuth()
@@ -23,10 +28,10 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @ApiOperation({ summary: 'Create new track' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Track has been successfully created',
-    type: CreateTrackDto 
+    type: CreateTrackDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @Post()
@@ -35,10 +40,10 @@ export class TrackController {
   }
 
   @ApiOperation({ summary: 'Get all tracks' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return all tracks',
-    type: [CreateTrackDto]
+    type: [CreateTrackDto],
   })
   @Get()
   async getAll(): Promise<Track[]> {
@@ -46,10 +51,10 @@ export class TrackController {
   }
 
   @ApiOperation({ summary: 'Get track by id' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return track by id',
-    type: CreateTrackDto 
+    type: CreateTrackDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Track not found' })
@@ -59,10 +64,10 @@ export class TrackController {
   }
 
   @ApiOperation({ summary: 'Update track' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Track has been successfully updated',
-    type: CreateTrackDto 
+    type: CreateTrackDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Track not found' })
@@ -75,7 +80,10 @@ export class TrackController {
   }
 
   @ApiOperation({ summary: 'Delete track' })
-  @ApiResponse({ status: 204, description: 'Track has been successfully deleted' })
+  @ApiResponse({
+    status: 204,
+    description: 'Track has been successfully deleted',
+  })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Track not found' })
   @Delete(':id')

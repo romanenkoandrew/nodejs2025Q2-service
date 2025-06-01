@@ -13,7 +13,7 @@ export class CreateTrackDto {
     description: 'Track name',
     example: 'Landmines',
     minLength: 3,
-    maxLength: 50
+    maxLength: 50,
   })
   @IsString()
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class CreateTrackDto {
   @ApiProperty({
     description: 'Track duration in seconds',
     example: 262,
-    minimum: 1
+    minimum: 1,
   })
   @IsNumber()
   @IsNotEmpty()
@@ -33,7 +33,7 @@ export class CreateTrackDto {
   @ApiProperty({
     description: 'Artist ID (optional)',
     example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false
+    required: false,
   })
   @IsString()
   @IsOptional()
@@ -42,7 +42,7 @@ export class CreateTrackDto {
   @ApiProperty({
     description: 'Album ID (optional)',
     example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false
+    required: false,
   })
   @IsString()
   @IsOptional()

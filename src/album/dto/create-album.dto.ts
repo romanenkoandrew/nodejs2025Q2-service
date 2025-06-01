@@ -14,7 +14,7 @@ export class CreateAlbumDto {
     description: 'Album name',
     example: 'Heaven :x: Hell',
     minLength: 3,
-    maxLength: 50
+    maxLength: 50,
   })
   @IsString()
   @IsNotEmpty()
@@ -25,7 +25,7 @@ export class CreateAlbumDto {
     description: 'Release year',
     example: 2024,
     minimum: 1900,
-    maximum: 2025
+    maximum: 2025,
   })
   @IsNumber()
   @Min(1900)
@@ -35,7 +35,7 @@ export class CreateAlbumDto {
   @ApiProperty({
     description: 'Artist ID (optional)',
     example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false
+    required: false,
   })
   @IsString()
   @IsOptional()

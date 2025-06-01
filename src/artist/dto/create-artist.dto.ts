@@ -6,7 +6,7 @@ export class CreateArtistDto {
     description: 'Artist name',
     example: 'Deryck Whibley',
     minLength: 3,
-    maxLength: 50
+    maxLength: 50,
   })
   @IsString()
   @IsNotEmpty()
@@ -15,7 +15,7 @@ export class CreateArtistDto {
 
   @ApiProperty({
     description: 'Whether the artist has won a Grammy',
-    example: false
+    example: false,
   })
   @IsBoolean()
   @IsNotEmpty()
