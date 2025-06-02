@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/romanenkoandrew/nodejs2025Q2-service.git
 ```
 
 ## Installing NPM modules
@@ -16,6 +16,18 @@ git clone {repository URL}
 ```
 npm install
 ```
+
+## Environment Variables
+
+Before running the application, you need to create a `.env` file in the root directory of the project. Copy the contents from `.env.example` and fill in the required environment variables:
+
+```bash
+# Copy .env.example to .env
+cp .env.example .env
+```
+
+Main environment variables:
+- `PORT` - port on which the application will run (default: 4000)
 
 ## Running application
 
