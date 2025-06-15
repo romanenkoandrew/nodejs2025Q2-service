@@ -8,6 +8,7 @@ import { AlbumModule } from './album/album.module';
 import { TrackModule } from './track/track.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { AuthModule } from './auth/auth.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     TrackModule,
     FavoritesModule,
     AuthModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
