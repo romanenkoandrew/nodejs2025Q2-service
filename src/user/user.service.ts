@@ -38,6 +38,10 @@ export class UserService {
     return this.withoutPassword([user])[0];
   }
 
+  async getByLogin(login: string): Promise<User> {
+    return await this.getUserByLogin(login);
+  }
+
   async update(
     id: string,
     updatePasswordDto: UpdateUserDto,
@@ -60,6 +64,16 @@ export class UserService {
   private async getUserById(id: string): Promise<User> {
     return new Promise((resolve, reject) => {
       const user = this.users.find((user) => user.id === id);
+      if (!user) {
+        reject(new UserNotFoundException());
+      }
+      resolve(user);
+    });
+  }
+
+  private async getUserByLogin(login: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+      const user = this.users.find((user) => user.login === login);
       if (!user) {
         reject(new UserNotFoundException());
       }
