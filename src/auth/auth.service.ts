@@ -1,7 +1,6 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserService } from 'src/user/user.service';
-import { InvalidPasswordException } from 'src/user/exceptions/user.exceptions';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -23,7 +22,7 @@ export class AuthService {
       }
       const payload = { sub: user.id, username: user.login };
       return {
-        access_token: await this.jwtService.signAsync(payload),
+        accessToken: await this.jwtService.signAsync(payload),
       };
     } catch (error) {
       throw new HttpException('Invalid credentials', HttpStatus.FORBIDDEN);
