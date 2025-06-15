@@ -7,4 +7,4 @@ export interface JwtPayload {
   userId: string;
   login: string;
   type: 'access' | 'refresh';
-} 
+}

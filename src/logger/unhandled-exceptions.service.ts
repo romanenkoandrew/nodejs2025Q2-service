@@ -14,11 +14,8 @@ export class UnhandledExceptionsService implements OnModuleInit {
 
   private setupUnhandledExceptionHandler(): void {
     process.on('uncaughtException', (error: Error) => {
-      this.logger.error(
-        `Uncaught Exception: ${error.message}`,
-        error.stack,
-      );
-      
+      this.logger.error(`Uncaught Exception: ${error.message}`, error.stack);
+
       setTimeout(() => {
         process.exit(1);
       }, 1000);
@@ -27,12 +24,10 @@ export class UnhandledExceptionsService implements OnModuleInit {
 
   private setupUnhandledRejectionHandler(): void {
     process.on('unhandledRejection', (reason: unknown) => {
-      const error = reason instanceof Error ? reason : new Error(String(reason));
-      
-      this.logger.error(
-        `Unhandled Rejection: ${error.message}`,
-        error.stack,
-      );
+      const error =
+        reason instanceof Error ? reason : new Error(String(reason));
+
+      this.logger.error(`Unhandled Rejection: ${error.message}`, error.stack);
     });
   }
-} 
+}

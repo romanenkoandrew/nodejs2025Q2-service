@@ -28,7 +28,7 @@ async function bootstrap() {
   app.useLogger(new CustomLogger(app.get(FileLoggerService)));
   app.useGlobalInterceptors(app.get(HttpLoggerInterceptor));
   app.useGlobalFilters(app.get(AllExceptionsFilter));
-  
+
   await app.listen(port);
 }
 bootstrap();

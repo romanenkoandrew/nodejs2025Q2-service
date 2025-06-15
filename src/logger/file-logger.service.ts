@@ -20,7 +20,10 @@ export class FileLoggerService {
     this.initializeLogDirectory();
     this.currentErrorFile = DEFAULT_ERROR_LOG_FILE;
     this.currentCombinedFile = DEFAULT_COMBINED_LOG_FILE;
-    this.maxFileSize = this.configService.get<number>('MAX_LOG_FILE_SIZE', DEFAULT_MAX_FILE_SIZE);
+    this.maxFileSize = this.configService.get<number>(
+      'MAX_LOG_FILE_SIZE',
+      DEFAULT_MAX_FILE_SIZE,
+    );
   }
 
   private async initializeLogDirectory(): Promise<void> {
@@ -29,7 +32,11 @@ export class FileLoggerService {
     }
   }
 
-  private formatMessage(level: string, message: string, context?: string): string {
+  private formatMessage(
+    level: string,
+    message: string,
+    context?: string,
+  ): string {
     const timestamp = new Date().toISOString();
     const contextStr = context ? `[${context}]` : '';
     const resultLog = `${timestamp} ${level} ${contextStr} ${message}\n`;
@@ -51,13 +58,13 @@ export class FileLoggerService {
       const files = await readdir(this.logDir);
       const pattern = new RegExp(`^${baseFilename}\\.(\\d+)\\.log$`);
       const numbers = files
-        .map(file => {
+        .map((file) => {
           const match = file.match(pattern);
           return match ? parseInt(match[1], 10) : 0;
         })
-        .filter(num => !isNaN(num));
+        .filter((num) => !isNaN(num));
 
-        return numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
+      return numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
     } catch (error) {
       return 1;
     }
@@ -72,7 +79,7 @@ export class FileLoggerService {
   private async writeToFile(filename: string, message: string): Promise<void> {
     const filePath = join(this.logDir, filename);
     const currentSize = await this.getFileSize(filePath);
-    
+
     if (currentSize >= this.maxFileSize) {
       const newFilename = await this.rotateFile(filename);
       const newFilePath = join(this.logDir, newFilename);
@@ -94,11 +101,15 @@ export class FileLoggerService {
     await this.writeToFile(this.currentCombinedFile, formattedMessage);
   }
 
-  async error(message: string, trace?: string, context?: string): Promise<void> {
+  async error(
+    message: string,
+    trace?: string,
+    context?: string,
+  ): Promise<void> {
     const formattedMessage = this.formatMessage('ERROR', message, context);
     await this.writeToFile(this.currentErrorFile, formattedMessage);
     await this.writeToFile(this.currentCombinedFile, formattedMessage);
-    
+
     if (trace) {
       const traceMessage = this.formatMessage('ERROR', trace, context);
       await this.writeToFile(this.currentErrorFile, traceMessage);
@@ -120,4 +131,4 @@ export class FileLoggerService {
     const formattedMessage = this.formatMessage('VERBOSE', message, context);
     await this.writeToFile(this.currentCombinedFile, formattedMessage);
   }
-} 
+}

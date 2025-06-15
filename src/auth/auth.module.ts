@@ -13,7 +13,9 @@ import { APP_GUARD } from '@nestjs/core';
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET_KEY'),
-        signOptions: { expiresIn: configService.get<string>('TOKEN_EXPIRE_TIME') },
+        signOptions: {
+          expiresIn: configService.get<string>('TOKEN_EXPIRE_TIME'),
+        },
       }),
       inject: [ConfigService],
     }),

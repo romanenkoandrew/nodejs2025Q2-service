@@ -22,5 +22,4 @@ import { FileLoggerService } from './file-logger.service';
     UnhandledExceptionsService,
   ],
 })
-
 export class LoggerModule {}

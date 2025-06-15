@@ -21,7 +21,12 @@ export class AuthService {
   async login(createAuthDto: CreateAuthDto): Promise<Tokens> {
     try {
       const user = await this.userService.getByLogin(createAuthDto.login);
-      if (!(await this.userService.comparePassword(createAuthDto.password, user.password))) {
+      if (
+        !(await this.userService.comparePassword(
+          createAuthDto.password,
+          user.password,
+        ))
+      ) {
         throw new Error('Invalid credentials');
       }
       return await this.generateTokens(user.id, user.login);
@@ -60,9 +65,10 @@ export class AuthService {
 
   async refresh(refreshTokenDto: RefreshTokenDto): Promise<Tokens> {
     try {
-      const { userId, login, type } = await this.jwtService.verifyAsync<JwtPayload>(
-        refreshTokenDto.refreshToken,
-      );
+      const { userId, login, type } =
+        await this.jwtService.verifyAsync<JwtPayload>(
+          refreshTokenDto.refreshToken,
+        );
 
       if (type !== 'refresh') {
         throw new Error('Invalid token type');

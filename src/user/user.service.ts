@@ -54,7 +54,12 @@ export class UserService {
     updatePasswordDto: UpdateUserDto,
   ): Promise<UserWithoutPassword> {
     const user = await this.getUserById(id);
-    if (!(await this.comparePassword(updatePasswordDto.oldPassword, user.password))) {
+    if (
+      !(await this.comparePassword(
+        updatePasswordDto.oldPassword,
+        user.password,
+      ))
+    ) {
       throw new InvalidPasswordException();
     }
     user.password = await this.hashPassword(updatePasswordDto.newPassword);
@@ -98,10 +103,16 @@ export class UserService {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, Number(this.configService.get<string>('CRYPT_SALT')));
+    return await bcrypt.hash(
+      password,
+      Number(this.configService.get<string>('CRYPT_SALT')),
+    );
   }
 
-  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
 }
