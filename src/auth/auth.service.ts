@@ -17,7 +17,7 @@ export class AuthService {
   async login(createAuthDto: CreateAuthDto) {
     try {
       const user = await this.userService.getByLogin(createAuthDto.login);
-      if (user.password !== createAuthDto.password) {
+      if (!(await this.userService.comparePassword(createAuthDto.password, user.password))) {
         throw new Error('Invalid credentials');
       }
       const payload = { sub: user.id, username: user.login };

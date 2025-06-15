@@ -7,15 +7,22 @@ import {
   InvalidPasswordException,
 } from './exceptions/user.exceptions';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   private readonly users: User[] = [];
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  constructor(private readonly configService: ConfigService) {}
+
+  async create(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
+    const { login, password } = createUserDto;
+    const hashedPassword = await this.hashPassword(password);
     const user: User = {
       id: randomUUID(),
-      ...createUserDto,
+      login,
+      password: hashedPassword,
       version: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -23,7 +30,7 @@ export class UserService {
 
     this.users.push(user);
     return new Promise((resolve) => {
-      resolve(user);
+      resolve(this.withoutPassword([user])[0]);
     });
   }
 
@@ -47,10 +54,10 @@ export class UserService {
     updatePasswordDto: UpdateUserDto,
   ): Promise<UserWithoutPassword> {
     const user = await this.getUserById(id);
-    if (user.password !== updatePasswordDto.oldPassword) {
+    if (!(await this.comparePassword(updatePasswordDto.oldPassword, user.password))) {
       throw new InvalidPasswordException();
     }
-    user.password = updatePasswordDto.newPassword;
+    user.password = await this.hashPassword(updatePasswordDto.newPassword);
     user.version += 1;
     user.updatedAt = Date.now();
     return this.withoutPassword([user])[0];
@@ -88,5 +95,13 @@ export class UserService {
           Object.entries(user).filter(([key]) => key !== 'password'),
         ) as UserWithoutPassword,
     );
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, Number(this.configService.get<string>('CRYPT_SALT')));
+  }
+
+  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
   }
 }
