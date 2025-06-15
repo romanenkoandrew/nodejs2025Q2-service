@@ -10,7 +10,9 @@ export const jwtConfig = registerAs('jwt', (): JwtModuleOptions => {
   }
 
   if (!expiresIn) {
-    throw new Error('TOKEN_EXPIRE_TIME is not defined in environment variables');
+    throw new Error(
+      'TOKEN_EXPIRE_TIME is not defined in environment variables',
+    );
   }
 
   return {
@@ -18,4 +20,4 @@ export const jwtConfig = registerAs('jwt', (): JwtModuleOptions => {
     secret,
     signOptions: { expiresIn },
   };
-}); 
+});
