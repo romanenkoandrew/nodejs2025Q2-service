@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { CustomLogger } from './logger/logger.service';
 import { HttpLoggerInterceptor } from './logger/http-logger.interceptor';
 import { AllExceptionsFilter } from './logger/exception.filter';
+import { FileLoggerService } from './logger/file-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,7 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.useLogger(new CustomLogger());
+  app.useLogger(new CustomLogger(app.get(FileLoggerService)));
   app.useGlobalInterceptors(app.get(HttpLoggerInterceptor));
   app.useGlobalFilters(app.get(AllExceptionsFilter));
   

@@ -1,41 +1,44 @@
 import { Injectable, LoggerService, Scope } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { FileLoggerService } from './file-logger.service';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class CustomLogger implements LoggerService {
     private context?: string;
 
+    constructor(private readonly fileLogger: FileLoggerService) {}
+
     setContext(context: string): void {
         this.context = context;
     }
 
-    private formatMessage(level: string, message: string): string {
-        const timestamp = new Date().toISOString();
-        const context = this.context ? `[${this.context}]` : '';
-        return `${timestamp} ${level} ${context} ${message}`;
+    private handleLogError(err: Error, type: string): void {
+        console.error(`Failed to write ${type} log:`, err);
     }
 
     log(message: string): void {
-        console.log(this.formatMessage('LOG', message));
+        this.fileLogger.log(message, this.context)
+            .catch(err => this.handleLogError(err, 'log'));
     }
 
     error(message: string, trace?: string): void {
-        console.error(this.formatMessage('ERROR', message));
-        if (trace) {
-            console.error(trace);
-        }
+        this.fileLogger.error(message, trace, this.context)
+            .catch(err => this.handleLogError(err, 'error'));
     }
 
     warn(message: string): void {
-        console.warn(this.formatMessage('WARN', message));
+        this.fileLogger.warn(message, this.context)
+            .catch(err => this.handleLogError(err, 'warning'));
     }
 
     debug(message: string): void {
-        console.debug(this.formatMessage('DEBUG', message));
+        this.fileLogger.debug(message, this.context)
+            .catch(err => this.handleLogError(err, 'debug'));
     }
 
     verbose(message: string): void {
-        console.log(this.formatMessage('VERBOSE', message));
+        this.fileLogger.verbose(message, this.context)
+            .catch(err => this.handleLogError(err, 'verbose'));
     }
 
     logHttpRequest(req: Request, res: Response, responseTime: number): void {
